@@ -1,3 +1,39 @@
+<#
+.Synopsis
+   Gets running process memory information in relationship to total memory in use.
+.DESCRIPTION
+   This function uses the Get-Process cmdlet to retrieve running processes grouped by
+   name and path. For each grouping it totals the number of running processes, sums the
+   workingset property, and provides a percentage of total memory in use by the workingset
+   property.
+.EXAMPLE
+In this example, process memory data is retrieved from the local machine.
+
+>Get-ProcessMemory
+
+ProcName        : AcrobatNotificationClient
+Path            : C:\Program Files\WindowsApps\ReaderNotificationClient_1.0.4.0_x86__e1rzdqpraam7r\AcrobatNotificationClient.exe
+TotalProcs      : 1
+WorkingSetTotal : 9715712
+Percentage      : 0.000834550092356408
+
+ProcName        : AdobeCollabSync
+Path            : C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AdobeCollabSync.exe
+TotalProcs      : 2
+WorkingSetTotal : 21123072
+Percentage      : 0.00181440759961298
+
+....
+
+.EXAMPLE
+This example retrieves process memory data from svr1, and svr2
+   "svr1", "svr2" | Get-ProcessMemory
+.INPUTS
+   This function will accept a ComputerName argument by value over the pipeline.
+.OUTPUTS
+   This function returns a PSCustomObject that is not specifically formatted or sorted.
+#>
+
 function Get-ProcessMemory {
     [CmdletBinding(DefaultParameterSetName = 'None')]
     [OutputType([PSCustomObject])]
@@ -61,6 +97,37 @@ function Get-ProcessMemory {
 
 } #Get-ProcessMemory Function Definition
 
+<#
+.Synopsis
+   Displays running process memory information in relationship to total memory in use.
+.DESCRIPTION
+   This function uses the Get-ProcessMemory function to retrieve running processes grouped by
+   name and path. For each grouping it totals the number of running processes, sums the
+   workingset property, and provides a percentage of total memory in use by the workingset
+   property.
+.EXAMPLE
+In this example, process memory data is displayed from the local machine.
+
+>Show-ProcessMemory
+
+Name                                Path                            Procesess        Usage/MB      Percentage
+----                                ----                            ---------        --------      ----------
+chrome                              C:\Program Files (x86)\Goog...         29        3,578.19          32.45%
+Teams                               C:\Users\micha\AppData\Loca...          9        1,295.24          11.75%
+svchost                             svchost                                78          899.66           8.16%
+Code                                C:\Users\micha\AppData\Loca...          8          838.29           7.60%
+powershell_ise                      C:\WINDOWS\system32\Windows...          1          582.86           5.29%
+....
+
+.EXAMPLE
+This example displays process memory data from svr1, and svr2
+   "svr1", "svr2" | Show-ProcessMemory
+.INPUTS
+   This function will accept a ComputerName argument by value over the pipeline.
+.OUTPUTS
+   This function returns a Formatted Table Object.
+#>
+
 function Show-ProcessMemory {
     [CmdletBinding(DefaultParameterSetName = 'None')]
 
@@ -116,3 +183,5 @@ function Show-ProcessMemory {
     } #Process Script Block for Show-ProcessMemory Function
     
 } #Show-ProcessMemory Function Definition
+
+Export-ModuleMember -Function "Get-ProcessMemory", "Show-ProcessMemory"
