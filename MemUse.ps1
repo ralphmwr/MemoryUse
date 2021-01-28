@@ -1,7 +1,22 @@
-$TotalInUse = ((Get-Process).WorkingSet | Measure-Object -Sum).sum
 Get-Process |
-    Group-Object Name |
-        Select-Object Name,
-                      Count, 
-                      @{n="WorkingSet";e={(Measure-Object -InputObject $_.Group.WorkingSet -Sum).sum}},
-                      @{n="Percentage";e={(Measure-Object -InputObject $_.Group.WorkingSet -Sum).sum / $TotalInUse}}
+    Tee-Object -Variable Procs |
+        Group-Object Name, path |
+            Select-Object @{
+                             n="ProcName"
+                             e={($_.name -split ", ")[0]}
+                           },
+                          @{
+                             n="Path"
+                             e={($_.name -split ", ")[-1]}
+                           },
+                          Count, 
+                          @{
+                             n="WorkingSetTotal"
+                             e={($_.Group.WorkingSet | Measure-Object -Sum).sum}
+                           },
+                          @{
+                             n="Percentage"
+                             e={($_.Group.WorkingSet | Measure-Object -Sum).sum / 
+                                ($Procs.workingset | Measure-Object -Sum).Sum 
+                               }
+                           }
