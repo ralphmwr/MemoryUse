@@ -9,7 +9,10 @@ Get-Process |
                              n="Path"
                              e={($_.name -split ", ")[-1]}
                            },
-                          Count, 
+                          @{
+                             n="TotalProcs"
+                             e={$_.Count}
+                           }, 
                           @{
                              n="WorkingSetTotal"
                              e={($_.Group.WorkingSet | Measure-Object -Sum).sum}
