@@ -83,6 +83,7 @@ function Get-ProcessMemory {
                                         }
                                     }
 '@ #Command here-string to invoke
+
         if ($PSCmdlet.ParameterSetName -eq "None") {
             Invoke-Expression -Command $Command
         } #if ParameterSetName is None (local machine)
