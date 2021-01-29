@@ -61,27 +61,27 @@ function Get-ProcessMemory {
                 Tee-Object -Variable Procs |
                     Group-Object Name, path |
                         Select-Object @{
-                                        n="ProcName"
-                                        e={($_.name -split ", ")[0]}
-                                    },
-                                    @{
-                                        n="Path"
-                                        e={($_.name -split ", ")[-1]}
-                                    },
-                                    @{
-                                        n="TotalProcs"
-                                        e={$_.Count}
-                                    }, 
-                                    @{
-                                        n="WorkingSetTotal"
-                                        e={($_.Group.WorkingSet | Measure-Object -Sum).sum}
-                                    },
-                                    @{
-                                        n="Percentage"
-                                        e={($_.Group.WorkingSet | Measure-Object -Sum).sum / 
-                                            ($Procs.workingset | Measure-Object -Sum).Sum 
-                                        }
-                                    }
+                            n="ProcName"
+                            e={($_.name -split ", ")[0]}
+                        },
+                        @{
+                            n="Path"
+                            e={($_.name -split ", ")[-1]}
+                        },
+                        @{
+                            n="TotalProcs"
+                            e={$_.Count}
+                        }, 
+                        @{
+                            n="WorkingSetTotal"
+                            e={($_.Group.WorkingSet | Measure-Object -Sum).sum}
+                        },
+                        @{
+                            n="Percentage"
+                            e={($_.Group.WorkingSet | Measure-Object -Sum).sum / 
+                                ($Procs.workingset | Measure-Object -Sum).Sum 
+                            }
+                        }
 '@ #Command here-string to invoke
 
         if ($PSCmdlet.ParameterSetName -eq "None") {
@@ -154,32 +154,32 @@ function Show-ProcessMemory {
         Get-ProcessMemory @PSBoundParameters |
             Sort-Object WorkingSetTotal -Descending |
                 Format-Table -Property @{
-                                            n="Name"
-                                            e={$_.ProcName}
-                                            w=35
-                                        },
-                                        @{
-                                            n="Path"
-                                            e={$_.Path}
-                                            w=30
-                                        },
-                                        @{
-                                            n="Procesess"
-                                            e={$_.TotalProcs}
-                                            w=10
-                                        },
-                                        @{
-                                            n="Usage/MB"
-                                            e={$_.WorkingSetTotal / 1MB}
-                                            f="N2"
-                                            w=15
-                                        },
-                                        @{
-                                            n="Percentage"
-                                            e={$_.Percentage}
-                                            f="P2"
-                                            w=15
-                                        }
+                    n="Name"
+                    e={$_.ProcName}
+                    w=35
+                },
+                @{
+                    n="Path"
+                    e={$_.Path}
+                    w=30
+                },
+                @{
+                    n="Procesess"
+                    e={$_.TotalProcs}
+                    w=10
+                },
+                @{
+                    n="Usage/MB"
+                    e={$_.WorkingSetTotal / 1MB}
+                    f="N2"
+                    w=15
+                },
+                @{
+                    n="Percentage"
+                    e={$_.Percentage}
+                    f="P2"
+                    w=15
+                }
         
     } #Process Script Block for Show-ProcessMemory Function
     
